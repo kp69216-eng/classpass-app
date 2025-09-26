@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClassPass Tracker</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="ClassPass">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23007AFF'/><text x='50' y='65' text-anchor='middle' fill='white' font-size='60' font-family='Arial'>C</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #007AFF;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: #007AFF;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #0051D5;
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #34C759;
+            margin-top: 12px;
+        }
+
+        .btn-secondary:hover {
+            background: #248A3D;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #007AFF;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .history {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .history-item {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .history-date {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .history-class {
+            font-weight: 600;
+            margin: 4px 0;
+        }
+
+        .history-studio {
+            color: #007AFF;
+        }
+
+        .credits-badge {
+            float: right;
+            background: #FF3B30;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .tab-nav {
+            display: flex;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .success-message {
+            background: #34C759;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 16px;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ClassPass Tracker</h1>
+            <p>Log your classes and track your progress</p>
+        </div>
+
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('log')">Log Class</button>
+            <button class="tab-btn" onclick="switchTab('stats')">Stats</button>
+        </div>
+
+        <div id="success-message" class="success-message"></div>
+
+        <div id="log-tab" class="tab-content active">
+            <div class="card">
+                <h2 style="margin-bottom: 20px; color: #333;">Log New Class</h2>
+                <form id="class-form">
+                    <div class="form-group">
+                        <label for="class-name">Class Name</label>
+                        <input type="text" id="class-name" placeholder="e.g., Hot Yoga, HIIT, Spin" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="studio-name">Studio Name</label>
+                        <input type="text" id="studio-name" placeholder="e.g., Studio Flow, FitClub" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="credits">Credits Used</label>
+                        <input type="number" id="credits" value="1" min="1" max="50" required>
+                    </div>
+                    
+                    <button type="submit" class="btn">Log Class</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="stats-tab" class="tab-content">
+            <div class="stats">
+                <div class="stat-card">
+                    <span class="stat-number" id="total-classes">0</span>
+                    <div class="stat-label">Total Classes</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="total-credits">0</span>
+                    <div class="stat-label">Total Credits</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="month-classes">0</span>
+                    <div class="stat-label">This Month</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="avg-credits">0</span>
+                    <div class="stat-label">Avg Credits</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 16px; color: #333;">Recent Classes</h3>
+                <div id="class-history" class="history">
+                    <p style="text-align: center; color: #666; font-style: italic;">No classes logged yet</p>
+                </div>
+                <button class="btn btn-secondary" onclick="exportData()">Export Data</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let classes = JSON.parse(localStorage.getItem('classpass-classes')) || [];
+
+        function switchTab(tabName) {
+            // Remove active class from all tabs and buttons
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Add active class to selected tab and button
+            document.getElementById(tabName + '-tab').classList.add('active');
+            document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
+
+            if (tabName === 'stats') {
+                updateStats();
+            }
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('success-message');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        function saveClass(className, studioName, credits) {
+            const classData = {
+                id: Date.now(),
+                className: className,
+                studioName: studioName,
+                credits: parseInt(credits),
+                date: new Date().toISOString(),
+                dateString: new Date().toLocaleDateString()
+            };
+
+            classes.unshift(classData);
+            localStorage.setItem('classpass-classes', JSON.stringify(classes));
+            showSuccess(`✅ Logged: ${className} at ${studioName}`);
+        }
+
+        function updateStats() {
+            const totalClasses = classes.length;
+            const totalCredits = classes.reduce((sum, cls) => sum + cls.credits, 0);
+            const avgCredits = totalClasses > 0 ? (totalCredits / totalClasses).toFixed(1) : 0;
+
+            // Current month classes
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+            const monthClasses = classes.filter(cls => {
+                const classDate = new Date(cls.date);
+                return classDate.getMonth() === currentMonth && classDate.getFullYear() === currentYear;
+            }).length;
+
+            document.getElementById('total-classes').textContent = totalClasses;
+            document.getElementById('total-credits').textContent = totalCredits;
+            document.getElementById('month-classes').textContent = monthClasses;
+            document.getElementById('avg-credits').textContent = avgCredits;
+
+            // Update history
+            const historyDiv = document.getElementById('class-history');
+            if (classes.length === 0) {
+                historyDiv.innerHTML = '<p style="text-align: center; color: #666; font-style: italic;">No classes logged yet</p>';
+            } else {
+                historyDiv.innerHTML = classes.slice(0, 10).map(cls => `
+                    <div class="history-item">
+                        <span class="credits-badge">${cls.credits} credits</span>
+                        <div class="history-class">${cls.className}</div>
+                        <div class="history-studio">${cls.studioName}</div>
+                        <div class="history-date">${cls.dateString}</div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function exportData() {
+            if (classes.length === 0) {
+                alert('No data to export');
+                return;
+            }
+
+            const csvContent = "Date,Class,Studio,Credits\n" + 
+                classes.map(cls => `${cls.dateString},"${cls.className}","${cls.studioName}",${cls.credits}`).join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'classpass-data.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Form submission
+        document.getElementById('class-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const className = document.getElementById('class-name').value.trim();
+            const studioName = document.getElementById('studio-name').value.trim();
+            const credits = document.getElementById('credits').value;
+
+            if (className && studioName && credits) {
+                saveClass(className, studioName, credits);
+                
+                // Clear form
+                document.getElementById('class-form').reset();
+                document.getElementById('credits').value = '1';
+            }
+        });
+
+        // Initialize stats on load
+        updateStats();
+
+        // Add to home screen prompt for iOS
+        if (window.navigator.standalone !== true) {
+            setTimeout(() => {
+                if (confirm('Add ClassPass Tracker to your home screen for quick access?')) {
+                    alert('Tap the share button and select "Add to Home Screen"');
+                }
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
