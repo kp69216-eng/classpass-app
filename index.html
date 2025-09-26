@@ -806,7 +806,10 @@
         }
 
         function saveClass(className, studioName, credits, classDate, classType) {
-            const selectedDate = new Date(classDate);
+            // Fix timezone issue - use the exact date selected without timezone conversion
+            const [year, month, day] = classDate.split('-');
+            const selectedDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+            
             const classData = {
                 id: Date.now(),
                 className: className,
