@@ -30,6 +30,7 @@
         }
 
         .header {
+            position: relative;
             text-align: center;
             margin-bottom: 30px;
             color: white;
@@ -44,6 +45,24 @@
         .header p {
             opacity: 0.9;
             font-size: 16px;
+        }
+
+        .credits-display {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .credits-number {
+            font-size: 18px;
+            font-weight: 700;
         }
 
         .card {
@@ -112,6 +131,21 @@
             background: #248A3D;
         }
 
+        .btn-small {
+            width: auto;
+            padding: 8px 16px;
+            font-size: 14px;
+            margin-left: 8px;
+        }
+
+        .btn-danger {
+            background: #FF3B30;
+        }
+
+        .btn-danger:hover {
+            background: #D70015;
+        }
+
         .stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -140,6 +174,16 @@
             margin-top: 4px;
         }
 
+        .credits-balance {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            color: white;
+            grid-column: span 2;
+        }
+
+        .credits-balance .stat-number {
+            color: white;
+        }
+
         .history {
             max-height: 300px;
             overflow-y: auto;
@@ -152,6 +196,7 @@
             padding: 12px;
             margin-bottom: 8px;
             font-size: 14px;
+            position: relative;
         }
 
         .history-date {
@@ -169,13 +214,32 @@
         }
 
         .credits-badge {
-            float: right;
+            position: absolute;
+            top: 12px;
+            right: 50px;
             background: #FF3B30;
             color: white;
             padding: 2px 8px;
             border-radius: 12px;
             font-size: 11px;
             font-weight: 600;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #FF3B30;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .tab-nav {
@@ -196,6 +260,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-size: 14px;
         }
 
         .tab-btn.active {
@@ -221,6 +286,137 @@
             display: none;
         }
 
+        .credits-row {
+            display: flex;
+            gap: 12px;
+            align-items: end;
+        }
+
+        .credits-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .sync-info {
+            background: #FFF3CD;
+            border: 1px solid #FFEAA7;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #856404;
+        }
+
+        .sync-info strong {
+            color: #533A03;
+        }
+
+        .calendar-container {
+            margin-top: 20px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .calendar-btn {
+            background: #007AFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            width: 32px;
+            height: 32px;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .calendar-btn:hover {
+            background: #0051D5;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .calendar-header {
+            text-align: center;
+            font-weight: 600;
+            font-size: 12px;
+            color: #666;
+            padding: 8px 4px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            border-radius: 8px;
+            position: relative;
+            cursor: default;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-day.today {
+            background: #007AFF;
+            color: white;
+            font-weight: 600;
+        }
+
+        .calendar-day.other-month {
+            color: #ccc;
+        }
+
+        .calendar-day.has-class {
+            background: #34C759;
+            color: white;
+            font-weight: 600;
+        }
+
+        .calendar-day.has-class.today {
+            background: #FF9500;
+        }
+
+        .class-dot {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 6px;
+            height: 6px;
+            background: #FF3B30;
+            border-radius: 50%;
+            font-size: 8px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .calendar-day.has-class .class-dot {
+            background: rgba(255, 255, 255, 0.8);
+            color: #34C759;
+        }
+
+        .calendar-day:hover {
+            background: rgba(0, 122, 255, 0.1);
+        }
+
+        .calendar-day.has-class:hover {
+            transform: scale(1.05);
+        }
+
         @media (max-width: 480px) {
             .container {
                 padding: 16px;
@@ -229,6 +425,21 @@
             .stats {
                 grid-template-columns: 1fr;
             }
+
+            .credits-balance {
+                grid-column: span 1;
+            }
+
+            .tab-btn {
+                font-size: 12px;
+                padding: 8px 4px;
+            }
+
+            .credits-display {
+                position: static;
+                margin-top: 10px;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -236,12 +447,18 @@
     <div class="container">
         <div class="header">
             <h1>ClassPass Tracker</h1>
-            <p>Log your classes and track your progress</p>
+            <p>Log classes, track credits & progress</p>
+            <div class="credits-display">
+                <div class="credits-number" id="header-credits">0</div>
+                <div style="font-size: 11px; opacity: 0.8;">credits</div>
+            </div>
         </div>
 
         <div class="tab-nav">
             <button class="tab-btn active" onclick="switchTab('log')">Log Class</button>
+            <button class="tab-btn" onclick="switchTab('credits')">Credits</button>
             <button class="tab-btn" onclick="switchTab('stats')">Stats</button>
+            <button class="tab-btn" onclick="switchTab('sync')">Sync</button>
         </div>
 
         <div id="success-message" class="success-message"></div>
@@ -268,6 +485,53 @@
                     <button type="submit" class="btn">Log Class</button>
                 </form>
             </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 16px; color: #333;">Recent Classes</h3>
+                <div id="class-history" class="history">
+                    <p style="text-align: center; color: #666; font-style: italic;">No classes logged yet</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="credits-tab" class="tab-content">
+            <div class="stats">
+                <div class="stat-card credits-balance">
+                    <span class="stat-number" id="credits-balance">0</span>
+                    <div class="stat-label">Credits Remaining</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 20px; color: #333;">Manage Credits</h3>
+                
+                <form id="add-credits-form">
+                    <div class="credits-row">
+                        <div class="form-group">
+                            <label for="credits-to-add">Add Credits</label>
+                            <input type="number" id="credits-to-add" placeholder="Credits purchased" min="1" required>
+                        </div>
+                        <button type="submit" class="btn btn-small">Add</button>
+                    </div>
+                </form>
+
+                <form id="set-credits-form" style="margin-top: 20px;">
+                    <div class="credits-row">
+                        <div class="form-group">
+                            <label for="credits-balance-set">Set Balance</label>
+                            <input type="number" id="credits-balance-set" placeholder="Current balance" min="0">
+                        </div>
+                        <button type="submit" class="btn btn-small btn-secondary">Set</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 16px; color: #333;">Credit History</h3>
+                <div id="credit-history" class="history">
+                    <p style="text-align: center; color: #666; font-style: italic;">No credit transactions yet</p>
+                </div>
+            </div>
         </div>
 
         <div id="stats-tab" class="tab-content">
@@ -277,8 +541,8 @@
                     <div class="stat-label">Total Classes</div>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-number" id="total-credits">0</span>
-                    <div class="stat-label">Total Credits</div>
+                    <span class="stat-number" id="total-credits-used">0</span>
+                    <div class="stat-label">Credits Used</div>
                 </div>
                 <div class="stat-card">
                     <span class="stat-number" id="month-classes">0</span>
@@ -291,20 +555,57 @@
             </div>
 
             <div class="card">
-                <h3 style="margin-bottom: 16px; color: #333;">Recent Classes</h3>
-                <div id="class-history" class="history">
-                    <p style="text-align: center; color: #666; font-style: italic;">No classes logged yet</p>
+                <h3 style="margin-bottom: 16px; color: #333;">Membership Timeline</h3>
+                <div class="form-group">
+                    <label for="membership-start">Membership Start Date</label>
+                    <input type="date" id="membership-start" onchange="saveMembershipStart()">
                 </div>
-                <button class="btn btn-secondary" onclick="exportData()">Export Data</button>
+                <div id="calendar-container">
+                    <div class="calendar-nav">
+                        <button class="calendar-btn" onclick="changeMonth(-1)">‹</button>
+                        <h4 id="calendar-month-year"></h4>
+                        <button class="calendar-btn" onclick="changeMonth(1)">›</button>
+                    </div>
+                    <div class="calendar-grid" id="calendar-grid"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="sync-tab" class="tab-content">
+            <div class="sync-info">
+                <strong>📱 Cross-Device Sync Options:</strong><br>
+                Your data is stored locally on this device. To access on other devices:
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 16px; color: #333;">Export & Import</h3>
+                <button class="btn" onclick="exportData()">📥 Export All Data</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('import-file').click()">📤 Import Data</button>
+                <input type="file" id="import-file" accept=".csv,.json" style="display: none;" onchange="importData(event)">
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 16px; color: #333;">Manual Sync Instructions</h3>
+                <p style="color: #666; font-size: 14px; line-height: 1.5;">
+                    <strong>To sync between devices:</strong><br>
+                    1. Export data from this device<br>
+                    2. Send file to your other device (email/AirDrop)<br>
+                    3. Import the file on your other device<br><br>
+                    <strong>For Google Sheets sync:</strong><br>
+                    Export as CSV → Open in Google Sheets → Share the sheet
+                </p>
             </div>
         </div>
     </div>
 
     <script>
         let classes = JSON.parse(localStorage.getItem('classpass-classes')) || [];
+        let creditTransactions = JSON.parse(localStorage.getItem('classpass-credits')) || [];
+        let currentCredits = parseInt(localStorage.getItem('classpass-current-credits')) || 0;
+        let membershipStart = localStorage.getItem('classpass-membership-start') || '';
+        let currentCalendarDate = new Date();
 
         function switchTab(tabName) {
-            // Remove active class from all tabs and buttons
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
             });
@@ -312,12 +613,14 @@
                 btn.classList.remove('active');
             });
 
-            // Add active class to selected tab and button
             document.getElementById(tabName + '-tab').classList.add('active');
             document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
 
             if (tabName === 'stats') {
                 updateStats();
+                generateCalendar();
+            } else if (tabName === 'credits') {
+                updateCreditsDisplay();
             }
         }
 
@@ -341,36 +644,79 @@
             };
 
             classes.unshift(classData);
+            currentCredits = Math.max(0, currentCredits - parseInt(credits));
+            
             localStorage.setItem('classpass-classes', JSON.stringify(classes));
+            localStorage.setItem('classpass-current-credits', currentCredits.toString());
+            
             showSuccess(`✅ Logged: ${className} at ${studioName}`);
+            updateClassHistory();
         }
 
-        function updateStats() {
-            const totalClasses = classes.length;
-            const totalCredits = classes.reduce((sum, cls) => sum + cls.credits, 0);
-            const avgCredits = totalClasses > 0 ? (totalCredits / totalClasses).toFixed(1) : 0;
+        function deleteClass(classId) {
+            if (confirm('Delete this class entry?')) {
+                const classToDelete = classes.find(c => c.id === classId);
+                if (classToDelete) {
+                    currentCredits += classToDelete.credits; // Refund credits
+                    classes = classes.filter(c => c.id !== classId);
+                    localStorage.setItem('classpass-classes', JSON.stringify(classes));
+                    localStorage.setItem('classpass-current-credits', currentCredits.toString());
+                    showSuccess('✅ Class deleted and credits refunded');
+                    updateClassHistory();
+                    updateStats();
+                    updateCreditsDisplay();
+                }
+            }
+        }
 
-            // Current month classes
-            const currentMonth = new Date().getMonth();
-            const currentYear = new Date().getFullYear();
-            const monthClasses = classes.filter(cls => {
-                const classDate = new Date(cls.date);
-                return classDate.getMonth() === currentMonth && classDate.getFullYear() === currentYear;
-            }).length;
+        function addCredits(amount) {
+            const transaction = {
+                id: Date.now(),
+                type: 'purchase',
+                amount: parseInt(amount),
+                date: new Date().toISOString(),
+                dateString: new Date().toLocaleDateString()
+            };
 
-            document.getElementById('total-classes').textContent = totalClasses;
-            document.getElementById('total-credits').textContent = totalCredits;
-            document.getElementById('month-classes').textContent = monthClasses;
-            document.getElementById('avg-credits').textContent = avgCredits;
+            creditTransactions.unshift(transaction);
+            currentCredits += parseInt(amount);
+            
+            localStorage.setItem('classpass-credits', JSON.stringify(creditTransactions));
+            localStorage.setItem('classpass-current-credits', currentCredits.toString());
+            
+            showSuccess(`✅ Added ${amount} credits`);
+            updateCreditsDisplay();
+        }
 
-            // Update history
+        function setCredits(amount) {
+            const transaction = {
+                id: Date.now(),
+                type: 'balance_set',
+                amount: parseInt(amount),
+                previousBalance: currentCredits,
+                date: new Date().toISOString(),
+                dateString: new Date().toLocaleDateString()
+            };
+
+            creditTransactions.unshift(transaction);
+            currentCredits = parseInt(amount);
+            
+            localStorage.setItem('classpass-credits', JSON.stringify(creditTransactions));
+            localStorage.setItem('classpass-current-credits', currentCredits.toString());
+            
+            showSuccess(`✅ Balance set to ${amount} credits`);
+            updateCreditsDisplay();
+        }
+
+        function updateClassHistory() {
             const historyDiv = document.getElementById('class-history');
             if (classes.length === 0) {
                 historyDiv.innerHTML = '<p style="text-align: center; color: #666; font-style: italic;">No classes logged yet</p>';
             } else {
-                historyDiv.innerHTML = classes.slice(0, 10).map(cls => `
+                historyDiv.innerHTML = classes.slice(0, 15).map(cls => `
                     <div class="history-item">
-                        <span class="credits-badge">${cls.credits} credits</span>
+                        <button class="delete-btn" onclick="deleteClass(${cls.id})">×</button>
+                        <span class="credits-badge">${cls.credits}</span>
                         <div class="history-class">${cls.className}</div>
                         <div class="history-studio">${cls.studioName}</div>
                         <div class="history-date">${cls.dateString}</div>
@@ -379,25 +725,191 @@
             }
         }
 
+        function updateCreditsDisplay() {
+            document.getElementById('credits-balance').textContent = currentCredits;
+            document.getElementById('header-credits').textContent = currentCredits; // Update header display
+            
+            const creditHistoryDiv = document.getElementById('credit-history');
+            if (creditTransactions.length === 0) {
+                creditHistoryDiv.innerHTML = '<p style="text-align: center; color: #666; font-style: italic;">No credit transactions yet</p>';
+            } else {
+                creditHistoryDiv.innerHTML = creditTransactions.slice(0, 10).map(trans => `
+                    <div class="history-item">
+                        <div class="history-class">
+                            ${trans.type === 'purchase' ? '💳 Credits Purchased' : '⚖️ Balance Set'}
+                        </div>
+                        <div class="history-studio">
+                            ${trans.type === 'purchase' ? `+${trans.amount} credits` : `Set to ${trans.amount} credits`}
+                        </div>
+                        <div class="history-date">${trans.dateString}</div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function updateStats() {
+            const totalClasses = classes.length;
+            const totalCreditsUsed = classes.reduce((sum, cls) => sum + cls.credits, 0);
+            const avgCredits = totalClasses > 0 ? (totalCreditsUsed / totalClasses).toFixed(1) : 0;
+
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+            const monthClasses = classes.filter(cls => {
+                const classDate = new Date(cls.date);
+                return classDate.getMonth() === currentMonth && classDate.getFullYear() === currentYear;
+            }).length;
+
+            document.getElementById('total-classes').textContent = totalClasses;
+            document.getElementById('total-credits-used').textContent = totalCreditsUsed;
+            document.getElementById('month-classes').textContent = monthClasses;
+            document.getElementById('avg-credits').textContent = avgCredits;
+        }
+
         function exportData() {
-            if (classes.length === 0) {
+            if (classes.length === 0 && creditTransactions.length === 0) {
                 alert('No data to export');
                 return;
             }
 
-            const csvContent = "Date,Class,Studio,Credits\n" + 
-                classes.map(cls => `${cls.dateString},"${cls.className}","${cls.studioName}",${cls.credits}`).join('\n');
-            
-            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const exportData = {
+                classes: classes,
+                creditTransactions: creditTransactions,
+                currentCredits: currentCredits,
+                exportDate: new Date().toISOString()
+            };
+
+            const jsonContent = JSON.stringify(exportData, null, 2);
+            const blob = new Blob([jsonContent], { type: 'application/json' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'classpass-data.csv';
+            a.download = `classpass-data-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             window.URL.revokeObjectURL(url);
         }
 
-        // Form submission
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    if (importedData.classes) {
+                        classes = importedData.classes;
+                        localStorage.setItem('classpass-classes', JSON.stringify(classes));
+                    }
+                    
+                    if (importedData.creditTransactions) {
+                        creditTransactions = importedData.creditTransactions;
+                        localStorage.setItem('classpass-credits', JSON.stringify(creditTransactions));
+                    }
+                    
+                    if (importedData.currentCredits !== undefined) {
+                        currentCredits = importedData.currentCredits;
+                        localStorage.setItem('classpass-current-credits', currentCredits.toString());
+                    }
+
+                    showSuccess('✅ Data imported successfully!');
+                    updateClassHistory();
+                    updateStats();
+                    updateCreditsDisplay();
+                } catch (error) {
+                    alert('Error importing data. Please check the file format.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function saveMembershipStart() {
+            membershipStart = document.getElementById('membership-start').value;
+            localStorage.setItem('classpass-membership-start', membershipStart);
+            generateCalendar();
+        }
+
+        function changeMonth(direction) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + direction);
+            generateCalendar();
+        }
+
+        function generateCalendar() {
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'];
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+            
+            // Update header
+            document.getElementById('calendar-month-year').textContent = `${monthNames[month]} ${year}`;
+            
+            // Get first day of month and number of days
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDayOfWeek = firstDay.getDay();
+            
+            // Create calendar grid
+            let calendarHTML = '';
+            
+            // Add day headers
+            dayNames.forEach(day => {
+                calendarHTML += `<div class="calendar-header">${day}</div>`;
+            });
+            
+            // Add empty cells for days before the first day of the month
+            for (let i = 0; i < startingDayOfWeek; i++) {
+                const prevMonthDay = new Date(year, month, -startingDayOfWeek + i + 1).getDate();
+                calendarHTML += `<div class="calendar-day other-month">${prevMonthDay}</div>`;
+            }
+            
+            // Add days of the current month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const currentDate = new Date(year, month, day);
+                const dateString = currentDate.toDateString();
+                const today = new Date().toDateString();
+                
+                // Check if there are classes on this day
+                const classesOnDay = classes.filter(cls => {
+                    const classDate = new Date(cls.date);
+                    return classDate.toDateString() === dateString;
+                });
+                
+                // Check if this is before membership start
+                const membershipStartDate = membershipStart ? new Date(membershipStart) : null;
+                const isBeforeMembership = membershipStartDate && currentDate < membershipStartDate;
+                
+                let dayClass = 'calendar-day';
+                if (dateString === today) dayClass += ' today';
+                if (classesOnDay.length > 0) dayClass += ' has-class';
+                if (isBeforeMembership) dayClass += ' other-month';
+                
+                let dotHTML = '';
+                if (classesOnDay.length > 0) {
+                    if (classesOnDay.length === 1) {
+                        dotHTML = `<div class="class-dot"></div>`;
+                    } else {
+                        dotHTML = `<div class="class-dot">${classesOnDay.length}</div>`;
+                    }
+                }
+                
+                calendarHTML += `<div class="${dayClass}" title="${classesOnDay.length > 0 ? 
+                    classesOnDay.map(c => c.className).join(', ') : ''}">${day}${dotHTML}</div>`;
+            }
+            
+            // Add days from next month to fill the grid
+            const totalCells = Math.ceil((daysInMonth + startingDayOfWeek) / 7) * 7;
+            const remainingCells = totalCells - (daysInMonth + startingDayOfWeek);
+            for (let day = 1; day <= remainingCells; day++) {
+                calendarHTML += `<div class="calendar-day other-month">${day}</div>`;
+            }
+            
+            document.getElementById('calendar-grid').innerHTML = calendarHTML;
+        }
+
+        // Form submissions
         document.getElementById('class-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -407,24 +919,41 @@
 
             if (className && studioName && credits) {
                 saveClass(className, studioName, credits);
-                
-                // Clear form
                 document.getElementById('class-form').reset();
                 document.getElementById('credits').value = '1';
             }
         });
 
-        // Initialize stats on load
-        updateStats();
+        document.getElementById('add-credits-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const credits = document.getElementById('credits-to-add').value;
+            if (credits) {
+                addCredits(credits);
+                document.getElementById('credits-to-add').value = '';
+            }
+        });
 
-        // Add to home screen prompt for iOS
-        if (window.navigator.standalone !== true) {
-            setTimeout(() => {
-                if (confirm('Add ClassPass Tracker to your home screen for quick access?')) {
-                    alert('Tap the share button and select "Add to Home Screen"');
-                }
-            }, 2000);
+        document.getElementById('set-credits-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const credits = document.getElementById('credits-balance-set').value;
+            if (credits !== '') {
+                setCredits(credits);
+                document.getElementById('credits-balance-set').value = '';
+            }
+        });
+
+        // Initialize
+        updateClassHistory();
+        updateStats();
+        updateCreditsDisplay();
+        
+        // Load membership start date
+        if (membershipStart) {
+            document.getElementById('membership-start').value = membershipStart;
         }
+        
+        generateCalendar();
     </script>
 </body>
 </html>
+                
