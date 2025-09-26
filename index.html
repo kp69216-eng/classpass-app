@@ -346,6 +346,7 @@
             grid-template-columns: repeat(7, 1fr);
             gap: 4px;
             margin-top: 8px;
+            touch-action: pan-x;
         }
 
         .calendar-header {
@@ -417,6 +418,113 @@
             transform: scale(1.05);
         }
 
+        .quick-btn {
+            background: rgba(0, 122, 255, 0.1);
+            border: 1px solid #007AFF;
+            color: #007AFF;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .quick-btn:hover {
+            background: #007AFF;
+            color: white;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .analytics-item {
+            background: rgba(0, 122, 255, 0.05);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .analytics-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .analytics-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #007AFF;
+        }
+
+        .analytics-sublabel {
+            font-size: 10px;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        .category-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .category-icon {
+            width: 20px;
+            margin-right: 8px;
+        }
+
+        .category-name {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .category-count {
+            font-weight: 600;
+            color: #007AFF;
+            margin-right: 8px;
+        }
+
+        .category-progress {
+            width: 60px;
+            height: 6px;
+            background: #e1e5e9;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .category-fill {
+            height: 100%;
+            background: #007AFF;
+            transition: width 0.3s ease;
+        }
+
+        .studio-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .studio-item:last-child {
+            border-bottom: none;
+        }
+
+        .studio-name {
+            font-weight: 500;
+        }
+
+        .studio-count {
+            color: #007AFF;
+            font-weight: 600;
+        }
+
         @media (max-width: 480px) {
             .container {
                 padding: 16px;
@@ -439,6 +547,15 @@
                 position: static;
                 margin-top: 10px;
                 text-align: center;
+            }
+
+            .btn, .calendar-btn, .quick-btn {
+                min-height: 44px;
+                font-size: 16px;
+            }
+
+            .analytics-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -468,13 +585,37 @@
                 <h2 style="margin-bottom: 20px; color: #333;">Log New Class</h2>
                 <form id="class-form">
                     <div class="form-group">
+                        <label for="class-date">Class Date</label>
+                        <input type="date" id="class-date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="class-type">Class Type</label>
+                        <select id="class-type" required>
+                            <option value="">Select type...</option>
+                            <option value="Yoga">🧘‍♀️ Yoga</option>
+                            <option value="HIIT">🔥 HIIT</option>
+                            <option value="Strength">💪 Strength</option>
+                            <option value="Cardio">❤️ Cardio</option>
+                            <option value="Pilates">🤸‍♀️ Pilates</option>
+                            <option value="Barre">🩰 Barre</option>
+                            <option value="Cycling">🚴‍♀️ Cycling</option>
+                            <option value="Dance">💃 Dance</option>
+                            <option value="Boxing">🥊 Boxing</option>
+                            <option value="Other">🏃‍♀️ Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label for="class-name">Class Name</label>
-                        <input type="text" id="class-name" placeholder="e.g., Hot Yoga, HIIT, Spin" required>
+                        <input type="text" id="class-name" placeholder="e.g., Hot Yoga, HIIT, Spin" required list="class-suggestions">
+                        <datalist id="class-suggestions"></datalist>
                     </div>
                     
                     <div class="form-group">
                         <label for="studio-name">Studio Name</label>
-                        <input type="text" id="studio-name" placeholder="e.g., Studio Flow, FitClub" required>
+                        <input type="text" id="studio-name" placeholder="e.g., Studio Flow, FitClub" required list="studio-suggestions">
+                        <datalist id="studio-suggestions"></datalist>
                     </div>
                     
                     <div class="form-group">
@@ -484,6 +625,11 @@
                     
                     <button type="submit" class="btn">Log Class</button>
                 </form>
+
+                <div id="quick-actions" style="margin-top: 20px;">
+                    <h4 style="margin-bottom: 12px; color: #333; font-size: 16px;">Quick Add Recent</h4>
+                    <div id="recent-classes-buttons"></div>
+                </div>
             </div>
 
             <div class="card">
@@ -552,6 +698,32 @@
                     <span class="stat-number" id="avg-credits">0</span>
                     <div class="stat-label">Avg Credits</div>
                 </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 16px; color: #333;">Monthly Spending</h3>
+                <div class="analytics-grid">
+                    <div class="analytics-item">
+                        <div class="analytics-label">This Month</div>
+                        <div class="analytics-value" id="month-credits-used">0</div>
+                        <div class="analytics-sublabel">credits used</div>
+                    </div>
+                    <div class="analytics-item">
+                        <div class="analytics-label">Last Month</div>
+                        <div class="analytics-value" id="last-month-credits">0</div>
+                        <div class="analytics-sublabel">credits used</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 16px; color: #333;">Class Categories</h3>
+                <div id="category-breakdown"></div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 16px; color: #333;">Favorite Studios</h3>
+                <div id="studio-ranking"></div>
             </div>
 
             <div class="card">
@@ -633,14 +805,16 @@
             }, 3000);
         }
 
-        function saveClass(className, studioName, credits) {
+        function saveClass(className, studioName, credits, classDate, classType) {
+            const selectedDate = new Date(classDate);
             const classData = {
                 id: Date.now(),
                 className: className,
                 studioName: studioName,
+                classType: classType || 'Other',
                 credits: parseInt(credits),
-                date: new Date().toISOString(),
-                dateString: new Date().toLocaleDateString()
+                date: selectedDate.toISOString(),
+                dateString: selectedDate.toLocaleDateString()
             };
 
             classes.unshift(classData);
@@ -651,6 +825,8 @@
             
             showSuccess(`✅ Logged: ${className} at ${studioName}`);
             updateClassHistory();
+            updateSuggestions();
+            updateQuickActions();
         }
 
         function deleteClass(classId) {
@@ -665,6 +841,8 @@
                     updateClassHistory();
                     updateStats();
                     updateCreditsDisplay();
+                    updateSuggestions();
+                    updateQuickActions();
                 }
             }
         }
@@ -717,12 +895,66 @@
                     <div class="history-item">
                         <button class="delete-btn" onclick="deleteClass(${cls.id})">×</button>
                         <span class="credits-badge">${cls.credits}</span>
-                        <div class="history-class">${cls.className}</div>
+                        <div class="history-class">${getTypeEmoji(cls.classType)} ${cls.className}</div>
                         <div class="history-studio">${cls.studioName}</div>
                         <div class="history-date">${cls.dateString}</div>
                     </div>
                 `).join('');
             }
+        }
+
+        function getTypeEmoji(type) {
+            const emojis = {
+                'Yoga': '🧘‍♀️',
+                'HIIT': '🔥',
+                'Strength': '💪',
+                'Cardio': '❤️',
+                'Pilates': '🤸‍♀️',
+                'Barre': '🩰',
+                'Cycling': '🚴‍♀️',
+                'Dance': '💃',
+                'Boxing': '🥊',
+                'Other': '🏃‍♀️'
+            };
+            return emojis[type] || '🏃‍♀️';
+        }
+
+        function updateSuggestions() {
+            // Update studio suggestions
+            const uniqueStudios = [...new Set(classes.map(c => c.studioName))];
+            const studioDatalist = document.getElementById('studio-suggestions');
+            studioDatalist.innerHTML = uniqueStudios.map(studio => 
+                `<option value="${studio}"></option>`
+            ).join('');
+
+            // Update class name suggestions
+            const uniqueClasses = [...new Set(classes.map(c => c.className))];
+            const classDatalist = document.getElementById('class-suggestions');
+            classDatalist.innerHTML = uniqueClasses.map(className => 
+                `<option value="${className}"></option>`
+            ).join('');
+        }
+
+        function updateQuickActions() {
+            const recentClasses = classes.slice(0, 3);
+            const quickDiv = document.getElementById('recent-classes-buttons');
+            
+            if (recentClasses.length === 0) {
+                quickDiv.innerHTML = '<p style="color: #666; font-size: 12px; font-style: italic;">No recent classes</p>';
+            } else {
+                quickDiv.innerHTML = recentClasses.map(cls => `
+                    <button class="quick-btn" onclick="quickAddClass('${cls.className}', '${cls.studioName}', ${cls.credits}, '${cls.classType}')">
+                        ${getTypeEmoji(cls.classType)} ${cls.className} - ${cls.studioName}
+                    </button>
+                `).join('');
+            }
+        }
+
+        function quickAddClass(className, studioName, credits, classType) {
+            document.getElementById('class-name').value = className;
+            document.getElementById('studio-name').value = studioName;
+            document.getElementById('credits').value = credits;
+            document.getElementById('class-type').value = classType;
         }
 
         function updateCreditsDisplay() {
@@ -763,6 +995,95 @@
             document.getElementById('total-credits-used').textContent = totalCreditsUsed;
             document.getElementById('month-classes').textContent = monthClasses;
             document.getElementById('avg-credits').textContent = avgCredits;
+
+            updateAnalytics();
+        }
+
+        function updateAnalytics() {
+            // Monthly credits spending
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth();
+            const currentYear = currentDate.getFullYear();
+            
+            const thisMonthCredits = classes.filter(cls => {
+                const classDate = new Date(cls.date);
+                return classDate.getMonth() === currentMonth && classDate.getFullYear() === currentYear;
+            }).reduce((sum, cls) => sum + cls.credits, 0);
+
+            const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+            const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+            const lastMonthCredits = classes.filter(cls => {
+                const classDate = new Date(cls.date);
+                return classDate.getMonth() === lastMonth && classDate.getFullYear() === lastMonthYear;
+            }).reduce((sum, cls) => sum + cls.credits, 0);
+
+            document.getElementById('month-credits-used').textContent = thisMonthCredits;
+            document.getElementById('last-month-credits').textContent = lastMonthCredits;
+
+            // Category breakdown
+            updateCategoryBreakdown();
+            
+            // Studio ranking
+            updateStudioRanking();
+        }
+
+        function updateCategoryBreakdown() {
+            const categoryCount = {};
+            classes.forEach(cls => {
+                const type = cls.classType || 'Other';
+                categoryCount[type] = (categoryCount[type] || 0) + 1;
+            });
+
+            const totalClasses = classes.length;
+            const categoryDiv = document.getElementById('category-breakdown');
+            
+            if (totalClasses === 0) {
+                categoryDiv.innerHTML = '<p style="color: #666; font-size: 14px; font-style: italic;">No classes to analyze</p>';
+                return;
+            }
+
+            const sortedCategories = Object.entries(categoryCount)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 5);
+
+            categoryDiv.innerHTML = sortedCategories.map(([type, count]) => {
+                const percentage = (count / totalClasses) * 100;
+                return `
+                    <div class="category-bar">
+                        <div class="category-icon">${getTypeEmoji(type)}</div>
+                        <div class="category-name">${type}</div>
+                        <div class="category-count">${count}</div>
+                        <div class="category-progress">
+                            <div class="category-fill" style="width: ${percentage}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateStudioRanking() {
+            const studioCount = {};
+            classes.forEach(cls => {
+                studioCount[cls.studioName] = (studioCount[cls.studioName] || 0) + 1;
+            });
+
+            const studioDiv = document.getElementById('studio-ranking');
+            
+            if (classes.length === 0) {
+                studioDiv.innerHTML = '<p style="color: #666; font-size: 14px; font-style: italic;">No studios to rank</p>';
+                return;
+            }
+
+            const sortedStudios = Object.entries(studioCount)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 5);
+
+            studioDiv.innerHTML = sortedStudios.map(([studio, count]) => `
+                <div class="studio-item">
+                    <div class="studio-name">${studio}</div>
+                    <div class="studio-count">${count} classes</div>
+                </div>
+            `).join('');
         }
 
         function exportData() {
@@ -775,6 +1096,7 @@
                 classes: classes,
                 creditTransactions: creditTransactions,
                 currentCredits: currentCredits,
+                membershipStart: membershipStart,
                 exportDate: new Date().toISOString()
             };
 
@@ -812,10 +1134,19 @@
                         localStorage.setItem('classpass-current-credits', currentCredits.toString());
                     }
 
+                    if (importedData.membershipStart) {
+                        membershipStart = importedData.membershipStart;
+                        localStorage.setItem('classpass-membership-start', membershipStart);
+                        document.getElementById('membership-start').value = membershipStart;
+                    }
+
                     showSuccess('✅ Data imported successfully!');
                     updateClassHistory();
                     updateStats();
                     updateCreditsDisplay();
+                    updateSuggestions();
+                    updateQuickActions();
+                    generateCalendar();
                 } catch (error) {
                     alert('Error importing data. Please check the file format.');
                 }
@@ -895,8 +1226,9 @@
                     }
                 }
                 
-                calendarHTML += `<div class="${dayClass}" title="${classesOnDay.length > 0 ? 
-                    classesOnDay.map(c => c.className).join(', ') : ''}">${day}${dotHTML}</div>`;
+                const classNames = classesOnDay.map(c => `${getTypeEmoji(c.classType)} ${c.className}`).join(', ');
+                
+                calendarHTML += `<div class="${dayClass}" title="${classNames}">${day}${dotHTML}</div>`;
             }
             
             // Add days from next month to fill the grid
@@ -907,6 +1239,44 @@
             }
             
             document.getElementById('calendar-grid').innerHTML = calendarHTML;
+            
+            // Add swipe gestures for mobile
+            addSwipeGestures();
+        }
+
+        function addSwipeGestures() {
+            const calendarGrid = document.getElementById('calendar-grid');
+            let startX = 0;
+            let startY = 0;
+
+            calendarGrid.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            });
+
+            calendarGrid.addEventListener('touchend', (e) => {
+                if (!startX || !startY) return;
+
+                const endX = e.changedTouches[0].clientX;
+                const endY = e.changedTouches[0].clientY;
+
+                const diffX = startX - endX;
+                const diffY = startY - endY;
+
+                // Only trigger if horizontal swipe is more significant than vertical
+                if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                    if (diffX > 0) {
+                        // Swipe left - next month
+                        changeMonth(1);
+                    } else {
+                        // Swipe right - previous month
+                        changeMonth(-1);
+                    }
+                }
+
+                startX = 0;
+                startY = 0;
+            });
         }
 
         // Form submissions
@@ -916,11 +1286,15 @@
             const className = document.getElementById('class-name').value.trim();
             const studioName = document.getElementById('studio-name').value.trim();
             const credits = document.getElementById('credits').value;
+            const classDate = document.getElementById('class-date').value;
+            const classType = document.getElementById('class-type').value;
 
-            if (className && studioName && credits) {
-                saveClass(className, studioName, credits);
+            if (className && studioName && credits && classDate && classType) {
+                saveClass(className, studioName, credits, classDate, classType);
                 document.getElementById('class-form').reset();
                 document.getElementById('credits').value = '1';
+                // Set default date to today for next entry
+                document.getElementById('class-date').value = new Date().toISOString().split('T')[0];
             }
         });
 
@@ -946,6 +1320,11 @@
         updateClassHistory();
         updateStats();
         updateCreditsDisplay();
+        updateSuggestions();
+        updateQuickActions();
+        
+        // Set default date to today
+        document.getElementById('class-date').value = new Date().toISOString().split('T')[0];
         
         // Load membership start date
         if (membershipStart) {
