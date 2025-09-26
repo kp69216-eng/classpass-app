@@ -287,13 +287,13 @@
         }
 
         .credits-row {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
             gap: 12px;
             align-items: end;
         }
 
         .credits-row .form-group {
-            flex: 1;
             margin-bottom: 0;
         }
 
@@ -555,7 +555,16 @@
             }
 
             .analytics-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .credits-row {
                 grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .credits-row button {
+                justify-self: stretch;
             }
         }
     </style>
@@ -657,6 +666,10 @@
                             <label for="credits-to-add">Add Credits</label>
                             <input type="number" id="credits-to-add" placeholder="Credits purchased" min="1" required>
                         </div>
+                        <div class="form-group">
+                            <label for="credits-price">Price ($)</label>
+                            <input type="number" id="credits-price" placeholder="Amount paid" min="0" step="0.01" required>
+                        </div>
                         <button type="submit" class="btn btn-small">Add</button>
                     </div>
                 </form>
@@ -712,6 +725,16 @@
                         <div class="analytics-label">Last Month</div>
                         <div class="analytics-value" id="last-month-credits">0</div>
                         <div class="analytics-sublabel">credits used</div>
+                    </div>
+                    <div class="analytics-item">
+                        <div class="analytics-label">This Month Cost</div>
+                        <div class="analytics-value" id="month-spending">$0</div>
+                        <div class="analytics-sublabel">spent on credits</div>
+                    </div>
+                    <div class="analytics-item">
+                        <div class="analytics-label">Average Cost</div>
+                        <div class="analytics-value" id="avg-cost-per-credit">$0</div>
+                        <div class="analytics-sublabel">per credit</div>
                     </div>
                 </div>
             </div>
@@ -850,11 +873,12 @@
             }
         }
 
-        function addCredits(amount) {
+        function addCredits(amount, price) {
             const transaction = {
                 id: Date.now(),
                 type: 'purchase',
                 amount: parseInt(amount),
+                price: parseFloat(price) || 0,
                 date: new Date().toISOString(),
                 dateString: new Date().toLocaleDateString()
             };
@@ -865,7 +889,7 @@
             localStorage.setItem('classpass-credits', JSON.stringify(creditTransactions));
             localStorage.setItem('classpass-current-credits', currentCredits.toString());
             
-            showSuccess(`✅ Added ${amount} credits`);
+            showSuccess(`✅ Added ${amount} credits for ${price}`);
             updateCreditsDisplay();
         }
 
@@ -974,7 +998,9 @@
                             ${trans.type === 'purchase' ? '💳 Credits Purchased' : '⚖️ Balance Set'}
                         </div>
                         <div class="history-studio">
-                            ${trans.type === 'purchase' ? `+${trans.amount} credits` : `Set to ${trans.amount} credits`}
+                            ${trans.type === 'purchase' ? 
+                                `+${trans.amount} credits${trans.price ? ` (${trans.price})` : ''}` : 
+                                `Set to ${trans.amount} credits`}
                         </div>
                         <div class="history-date">${trans.dateString}</div>
                     </div>
@@ -1020,8 +1046,29 @@
                 return classDate.getMonth() === lastMonth && classDate.getFullYear() === lastMonthYear;
             }).reduce((sum, cls) => sum + cls.credits, 0);
 
+            // Calculate spending for this month
+            const thisMonthSpending = creditTransactions.filter(trans => {
+                const transDate = new Date(trans.date);
+                return trans.type === 'purchase' && 
+                       transDate.getMonth() === currentMonth && 
+                       transDate.getFullYear() === currentYear;
+            }).reduce((sum, trans) => sum + (trans.price || 0), 0);
+
+            // Calculate average cost per credit
+            const totalCreditsPurchased = creditTransactions
+                .filter(trans => trans.type === 'purchase')
+                .reduce((sum, trans) => sum + trans.amount, 0);
+            
+            const totalSpent = creditTransactions
+                .filter(trans => trans.type === 'purchase' && trans.price)
+                .reduce((sum, trans) => sum + trans.price, 0);
+
+            const avgCostPerCredit = totalCreditsPurchased > 0 ? (totalSpent / totalCreditsPurchased) : 0;
+
             document.getElementById('month-credits-used').textContent = thisMonthCredits;
             document.getElementById('last-month-credits').textContent = lastMonthCredits;
+            document.getElementById('month-spending').textContent = `${thisMonthSpending.toFixed(2)}`;
+            document.getElementById('avg-cost-per-credit').textContent = `${avgCostPerCredit.toFixed(2)}`;
 
             // Category breakdown
             updateCategoryBreakdown();
@@ -1304,9 +1351,11 @@
         document.getElementById('add-credits-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const credits = document.getElementById('credits-to-add').value;
-            if (credits) {
-                addCredits(credits);
+            const price = document.getElementById('credits-price').value;
+            if (credits && price) {
+                addCredits(credits, price);
                 document.getElementById('credits-to-add').value = '';
+                document.getElementById('credits-price').value = '';
             }
         });
 
