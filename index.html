@@ -717,25 +717,32 @@
                 <h3 style="margin-bottom: 16px; color: #333;">Monthly Spending</h3>
                 <div class="analytics-grid">
                     <div class="analytics-item">
-                        <div class="analytics-label">This Month</div>
-                        <div class="analytics-value" id="month-credits-used">0</div>
-                        <div class="analytics-sublabel">credits used</div>
-                    </div>
-                    <div class="analytics-item">
-                        <div class="analytics-label">Last Month</div>
-                        <div class="analytics-value" id="last-month-credits">0</div>
-                        <div class="analytics-sublabel">credits used</div>
-                    </div>
-                    <div class="analytics-item">
-                        <div class="analytics-label">This Month Cost</div>
+                        <div class="analytics-label">This Month Usage</div>
                         <div class="analytics-value" id="month-spending">$0</div>
-                        <div class="analytics-sublabel">spent on credits</div>
+                        <div class="analytics-sublabel">value of credits used</div>
                     </div>
                     <div class="analytics-item">
-                        <div class="analytics-label">Average Cost</div>
-                        <div class="analytics-value" id="avg-cost-per-credit">$0</div>
-                        <div class="analytics-sublabel">per credit</div>
+                        <div class="analytics-label">Last Month Usage</div>
+                        <div class="analytics-value" id="last-month-spending">$0</div>
+                        <div class="analytics-sublabel">value of credits used</div>
                     </div>
+                    <div class="analytics-item">
+                        <div class="analytics-label">Cost Per Class</div>
+                        <div class="analytics-value" id="cost-per-class">$0</div>
+                        <div class="analytics-sublabel">this month average</div>
+                    </div>
+                    <div class="analytics-item">
+                        <div class="analytics-label">Unused Value</div>
+                        <div class="analytics-value" id="unused-credits-value">$0</div>
+                        <div class="analytics-sublabel">in remaining credits</div>
+                    </div>
+                </div>
+                <div style="background: rgba(0, 122, 255, 0.05); border-radius: 8px; padding: 12px; margin-top: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-size: 12px; color: #666;">Avg Cost Per Credit:</span>
+                        <span style="font-size: 16px; font-weight: 600; color: #007AFF;" id="avg-cost-display">$0</span>
+                    </div>
+                    <div style="font-size: 11px; color: #999;">Based on all credit purchases</div>
                 </div>
             </div>
 
@@ -1387,4 +1394,3 @@
     </script>
 </body>
 </html>
-                
